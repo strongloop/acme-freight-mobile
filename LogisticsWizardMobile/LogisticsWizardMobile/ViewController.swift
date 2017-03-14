@@ -43,20 +43,52 @@ class ViewController: UIViewController, LogisticsLocationManagerDelegate {
     private var locationManager: LocationManager?
     @IBOutlet weak var mapView: MKMapView?
     @IBOutlet weak var registerTripButton: UIButton?
+    @IBOutlet weak var locationBanner: UILabel?
+    @IBOutlet weak var locationLabel: UILabel?
+    
+    var titleBarImageView: UIImageView {
+        let logo = UIImage(named: "API Connect_logo_white")
+        let imageView = UIImageView(image: logo)
+        imageView.contentMode = .scaleAspectFit
+        imageView.bounds = CGRect(x: 0, y: 0, width: 40, height: 40)
+        imageView.isUserInteractionEnabled = true
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.settingsButtonTapped))
+        tapRecognizer.numberOfTapsRequired = 4
+        imageView.addGestureRecognizer(tapRecognizer)
+        return imageView
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.barTintColor = "466BB0".hexColor
         navigationController?.navigationBar.isTranslucent = false
-        let logo = UIImage(named: "API Connect_logo_white")
-        let imageView = UIImageView(image: logo)
-        imageView.contentMode = .scaleAspectFit
-        imageView.bounds = CGRect(x: 0, y: 0, width: 40, height: 40)
-        navigationItem.titleView = imageView
+        navigationItem.titleView = titleBarImageView
+        
         locationManager = LocationManager()
         if let locationManager = locationManager {
             locationManager.delegate = self
         }
+        if let locationLabel = locationLabel {
+            updateLabelUI(locationLabel)
+            locationLabel.text = "Locating..."
+        }
+        if let locationBanner = locationBanner {
+            updateLabelUI(locationBanner)
+            locationBanner.layer.shadowOffset = CGSize(width: 1.0, height: 0.0)
+        }
+    }
+    
+    func updateLabelUI(_ label: UILabel) {
+        label.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6).cgColor
+        label.layer.shadowOffset = CGSize(width: 1.0, height: 3.0)
+        label.layer.shadowOpacity = 0.65
+        label.layer.shadowRadius = 3.0
+        label.layer.cornerRadius = 3.0
+        label.layer.masksToBounds = false
+    }
+    
+    func settingsButtonTapped() {
+        performSegue(withIdentifier: "settingsSegue", sender: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -67,8 +99,6 @@ class ViewController: UIViewController, LogisticsLocationManagerDelegate {
         button.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6).cgColor
         button.layer.shadowOffset = CGSize(width: 1.0, height: 3.0)
         button.layer.shadowOpacity = 0.65
-        button.layer.shadowRadius = 3.0
-        button.layer.cornerRadius = 3.0
         button.layer.masksToBounds = false
     }
     
@@ -90,16 +120,42 @@ class ViewController: UIViewController, LogisticsLocationManagerDelegate {
         guard let location = locationManager.lastLoggedLocation else {
             return
         }
+        // let coordinates = CLLocationCoordinate2DMake(34.46, -120.04)
+        // uncomment when you want to fake location
         button.isEnabled = false
-        button.setTitle("Registering trip", for: .normal)
+        UIView.animate(withDuration: 0.6) { 
+            button.backgroundColor = "758196".hexColor
+            button.setTitle("Registering trip...", for: .normal)
+        }
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         locationManager.getLocationData(forCoordinates: location.coordinate) { data in
-            defer {
-                button.isEnabled = true
-            }
             let trip = Trip(locationData: data, coordinates: location.coordinate)
-            WebAPI.register(trip, { success in
-                print("update UI now")
+            WebAPI.register(trip, { shipmentID, errorReason in
+                self.handleRegistrationResponse(data, shipmentID, errorReason)
             })
+        }
+    }
+    
+    private func handleRegistrationResponse(_ data: LocationData, _ shipmentID: Int?, _ errorReason: String?) {
+        guard let button = registerTripButton else {
+            return
+        }
+        DispatchQueue.main.async {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            button.isEnabled = true
+            UIView.animate(withDuration: 0.6) {
+                button.backgroundColor = "466BB0".hexColor
+                button.setTitle("Register trip", for: .normal)
+            }
+            if let shipmentID = shipmentID {
+                let alert = UIAlertController(title: "Trip Registered", message: "Shipment #\(shipmentID)\nStarting location: \(data.city), \(data.state), \(data.country)", preferredStyle: .alert)
+                alert.addOKButton(nil)
+                self.present(alert, animated: true, completion: nil)
+            } else if let errorReason = errorReason {
+                let alert = UIAlertController(title: "Error", message: errorReason, preferredStyle: .alert)
+                alert.addOKButton(nil)
+                self.present(alert, animated: true, completion: nil)
+            }
         }
     }
     
@@ -109,6 +165,13 @@ class ViewController: UIViewController, LogisticsLocationManagerDelegate {
         let span: MKCoordinateSpan = MKCoordinateSpanMake(0.05, 0.05)
         let region: MKCoordinateRegion = MKCoordinateRegionMake(location, span)
         mapView?.setRegion(region, animated: true)
+        manager.getLocationData(forCoordinates: location) { locationData in
+            DispatchQueue.main.async {
+                if let locationLabel = self.locationLabel {
+                    locationLabel.text = "\(locationData.city), \(locationData.state), \(locationData.country)"
+                }
+            }
+        }
     }
 }
 

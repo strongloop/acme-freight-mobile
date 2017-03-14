@@ -15,6 +15,7 @@
 		532C9F211E708DB2001D39EB /* LogisticsWizardMobileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532C9F201E708DB2001D39EB /* LogisticsWizardMobileTests.swift */; };
 		535A6CD41E786B5D008472D3 /* WebAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535A6CD31E786B5D008472D3 /* WebAPI.swift */; };
 		535A6CD61E786B92008472D3 /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535A6CD51E786B92008472D3 /* Trip.swift */; };
+		535A6CD81E788F5A008472D3 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535A6CD71E788F5A008472D3 /* SettingsController.swift */; };
 		535C15B11E785CFF00171705 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535C15B01E785CFF00171705 /* LocationManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +42,7 @@
 		532C9F221E708DB2001D39EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		535A6CD31E786B5D008472D3 /* WebAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebAPI.swift; sourceTree = "<group>"; };
 		535A6CD51E786B92008472D3 /* Trip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
+		535A6CD71E788F5A008472D3 /* SettingsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		535C15B01E785CFF00171705 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -86,6 +88,7 @@
 				532C9F0B1E708DB2001D39EB /* AppDelegate.swift */,
 				532C9F0D1E708DB2001D39EB /* ViewController.swift */,
 				535C15B01E785CFF00171705 /* LocationManager.swift */,
+				535A6CD71E788F5A008472D3 /* SettingsController.swift */,
 				535A6CD31E786B5D008472D3 /* WebAPI.swift */,
 				535A6CD51E786B92008472D3 /* Trip.swift */,
 				532C9F0F1E708DB2001D39EB /* Main.storyboard */,
@@ -155,7 +158,7 @@
 				TargetAttributes = {
 					532C9F071E708DB2001D39EB = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = L2QS4H9G32;
+						DevelopmentTeam = RQ632LL2X3;
 						ProvisioningStyle = Automatic;
 					};
 					532C9F1B1E708DB2001D39EB = {
@@ -210,6 +213,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				535A6CD81E788F5A008472D3 /* SettingsController.swift in Sources */,
 				535A6CD61E786B92008472D3 /* Trip.swift in Sources */,
 				532C9F0E1E708DB2001D39EB /* ViewController.swift in Sources */,
 				532C9F0C1E708DB2001D39EB /* AppDelegate.swift in Sources */,
@@ -353,7 +357,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = L2QS4H9G32;
+				DEVELOPMENT_TEAM = RQ632LL2X3;
 				INFOPLIST_FILE = LogisticsWizardMobile/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ibm.cloud.LogisticsWizardMobile;
@@ -366,7 +370,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = L2QS4H9G32;
+				DEVELOPMENT_TEAM = RQ632LL2X3;
 				INFOPLIST_FILE = LogisticsWizardMobile/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ibm.cloud.LogisticsWizardMobile;

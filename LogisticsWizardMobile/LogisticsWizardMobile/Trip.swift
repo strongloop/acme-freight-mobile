@@ -10,17 +10,6 @@ import UIKit
 import CoreLocation
 
 private extension String {
-    func toBool() -> Bool? {
-        switch self {
-        case "True", "true", "yes", "1":
-            return true
-        case "False", "false", "no", "0":
-            return false
-        default:
-            return nil
-        }
-    }
-    
     var dateFromISO8601: Date? {
         return Date.iso8601Formatter.date(from: self)
     }
@@ -56,7 +45,7 @@ class Trip: NSObject {
     }
     
     var json: [String: Any]? {
-        if let arrival = Calendar.current.date(byAdding: .day, value: 1, to: Date()) {
+        if let arrival = Calendar.current.date(byAdding: .day, value: 2, to: Date()) {
             return ["data" : ["status" : "IN_TRANSIT", "createdAt" : Date().iso8601, "estimatedTimeOfArrival" : arrival.iso8601, "fromId" : 3, "toId" : 3, "currentLocation" : ["city" : city, "state" : state, "country" : country, "latitude" : latitude, "longitude" : longitude]]]
         } else {
             return nil

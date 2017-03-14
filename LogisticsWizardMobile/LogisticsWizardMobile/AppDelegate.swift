@@ -18,7 +18,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         UIApplication.shared.statusBarStyle = .lightContent
+        customizeNavBar(UIColor.white)
+
+    UserDefaults.standard.set("ODAzMDIzNjEtYzkxNy00Y2JkLTlkYzUtZTExMzc1ZGQwMDk3Om1zVVlpZU95NkJqTXlYQ0xPNXQyNTZSNDRjeHZpYnBpaE9qQlI2ZUdMY0V0YWhJVkNHT2EyTDUwdXRYQlhEUEg=", forKey: WebAPIConstantKeys.openWhiskTokenKey)
+        UserDefaults.standard.set("https://openwhisk.ng.bluemix.net/api/v1/namespaces/svennam%40us.ibm.com_acme-freight/actions/create-shipment?blocking=true", forKey: WebAPIConstantKeys.hostURLKey)
+        
         return true
+    }
+    
+    func customizeNavBar(_ color: UIColor) {
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: color]
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: color], for: .normal)
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
