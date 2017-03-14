@@ -53,41 +53,43 @@ class WebAPI: NSObject {
             request.allHTTPHeaderFields = headers
             request.httpBody = postData as Data
             URLSession.shared.dataTask(with: request, completionHandler: { data, urlResponse, error in
-                if let error = error {
-                    completion(nil, error.localizedDescription)
-                } else {
-                    do {
-                        guard let data = data else {
-                            completion(nil, "")
-                            return
+                DispatchQueue.main.async {
+                    if let error = error {
+                        completion(nil, error.localizedDescription)
+                    } else {
+                        do {
+                            guard let data = data else {
+                                completion(nil, "")
+                                return
+                            }
+                            guard let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String : AnyObject] else {
+                                completion(nil, "Could not parse response")
+                                return
+                            }
+                            guard let response = json["response"] as? [String : Any] else {
+                                completion(nil, "Could not parse response")
+                                return
+                            }
+                            guard let result = response["result"] as? [String : Any] else {
+                                completion(nil, "Could not parse response")
+                                return
+                            }
+                            guard let resultData = result["data"] as? [String : Any] else {
+                                completion(nil, "Could not parse response")
+                                return
+                            }
+                            guard let shipmentID = resultData["id"] as? Int else {
+                                completion(nil, "Could not parse response")
+                                return
+                            }
+                            guard let httpResponse = urlResponse as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                                completion(nil, "Could not parse response")
+                                return
+                            }
+                            completion(shipmentID, nil)
+                        } catch {
+                            completion(nil, "Uncaught exception")
                         }
-                        guard let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String : AnyObject] else {
-                            completion(nil, "Could not parse response")
-                            return
-                        }
-                        guard let response = json["response"] as? [String : Any] else {
-                            completion(nil, "Could not parse response")
-                            return
-                        }
-                        guard let result = response["result"] as? [String : Any] else {
-                            completion(nil, "Could not parse response")
-                            return
-                        }
-                        guard let resultData = result["data"] as? [String : Any] else {
-                            completion(nil, "Could not parse response")
-                            return
-                        }
-                        guard let shipmentID = resultData["id"] as? Int else {
-                            completion(nil, "Could not parse response")
-                            return
-                        }
-                        guard let httpResponse = urlResponse as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                            completion(nil, "Could not parse response")
-                            return
-                        }
-                        completion(shipmentID, nil)
-                    } catch {
-                        
                     }
                 }
             }).resume()

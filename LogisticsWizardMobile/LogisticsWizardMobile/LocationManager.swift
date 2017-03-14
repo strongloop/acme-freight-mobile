@@ -42,15 +42,18 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     // MARK: Location Manager Delegate Methods
     
     internal func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = manager.location {
-            defer {
-                lastLoggedLocation = location
-            }
-            if lastLoggedLocation == nil {
-                guard let delegate = delegate else {
-                    return
+        DispatchQueue.main.async {
+            if let location = manager.location {
+                defer {
+                    self.lastLoggedLocation = location
                 }
-                delegate.manager(self, didReceiveFirst: location.coordinate)
+                if self.lastLoggedLocation == nil {
+                    guard let delegate = self.delegate else {
+                        return
+                    }
+                    self.lastLoggedLocation = location
+                    delegate.manager(self, didReceiveFirst: location.coordinate)
+                }
             }
         }
     }
@@ -62,16 +65,18 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             return
         }
         geocoder.reverseGeocodeLocation(lastLoggedLocation) { placemarks, error in
-            if let error = error {
-                print("Geocoding error: \(error.localizedDescription)")
-                completion(self.fakeLocationData())
-            }
-            if let placemarks = placemarks, let placemark = placemarks.first {
-                guard let country = placemark.country, let state = placemark.administrativeArea, let city = placemark.subAdministrativeArea else {
+            DispatchQueue.main.async {
+                if let error = error {
+                    print("Geocoding error: \(error.localizedDescription)")
                     completion(self.fakeLocationData())
-                    return
                 }
-                completion(LocationData(city: city, state: state, country: country))
+                if let placemarks = placemarks, let placemark = placemarks.first {
+                    guard let country = placemark.country, let state = placemark.administrativeArea, let city = placemark.subAdministrativeArea else {
+                        completion(self.fakeLocationData())
+                        return
+                    }
+                    completion(LocationData(city: city, state: state, country: country))
+                }
             }
         }
     }

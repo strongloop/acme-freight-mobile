@@ -85,16 +85,11 @@
 		532C9F0A1E708DB2001D39EB /* LogisticsWizardMobile */ = {
 			isa = PBXGroup;
 			children = (
-				532C9F0B1E708DB2001D39EB /* AppDelegate.swift */,
-				532C9F0D1E708DB2001D39EB /* ViewController.swift */,
-				535C15B01E785CFF00171705 /* LocationManager.swift */,
-				535A6CD71E788F5A008472D3 /* SettingsController.swift */,
-				535A6CD31E786B5D008472D3 /* WebAPI.swift */,
-				535A6CD51E786B92008472D3 /* Trip.swift */,
-				532C9F0F1E708DB2001D39EB /* Main.storyboard */,
-				532C9F121E708DB2001D39EB /* Assets.xcassets */,
-				532C9F141E708DB2001D39EB /* LaunchScreen.storyboard */,
-				532C9F171E708DB2001D39EB /* Info.plist */,
+				535A6CD91E78AA93008472D3 /* Controllers */,
+				535A6CDA1E78AAA0008472D3 /* Managers */,
+				535A6CDB1E78AAA9008472D3 /* Objects */,
+				535A6CDC1E78AABA008472D3 /* View */,
+				535A6CDD1E78AAC1008472D3 /* Util */,
 			);
 			path = LogisticsWizardMobile;
 			sourceTree = "<group>";
@@ -106,6 +101,51 @@
 				532C9F221E708DB2001D39EB /* Info.plist */,
 			);
 			path = LogisticsWizardMobileTests;
+			sourceTree = "<group>";
+		};
+		535A6CD91E78AA93008472D3 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				532C9F0B1E708DB2001D39EB /* AppDelegate.swift */,
+				532C9F0D1E708DB2001D39EB /* ViewController.swift */,
+				535A6CD71E788F5A008472D3 /* SettingsController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		535A6CDA1E78AAA0008472D3 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				535C15B01E785CFF00171705 /* LocationManager.swift */,
+				535A6CD31E786B5D008472D3 /* WebAPI.swift */,
+			);
+			name = Managers;
+			sourceTree = "<group>";
+		};
+		535A6CDB1E78AAA9008472D3 /* Objects */ = {
+			isa = PBXGroup;
+			children = (
+				535A6CD51E786B92008472D3 /* Trip.swift */,
+			);
+			name = Objects;
+			sourceTree = "<group>";
+		};
+		535A6CDC1E78AABA008472D3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				532C9F0F1E708DB2001D39EB /* Main.storyboard */,
+				532C9F121E708DB2001D39EB /* Assets.xcassets */,
+				532C9F141E708DB2001D39EB /* LaunchScreen.storyboard */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		535A6CDD1E78AAC1008472D3 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				532C9F171E708DB2001D39EB /* Info.plist */,
+			);
+			name = Util;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

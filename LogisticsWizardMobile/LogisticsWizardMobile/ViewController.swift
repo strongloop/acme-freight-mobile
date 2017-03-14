@@ -140,36 +140,32 @@ class ViewController: UIViewController, LogisticsLocationManagerDelegate {
         guard let button = registerTripButton else {
             return
         }
-        DispatchQueue.main.async {
-            UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            button.isEnabled = true
-            UIView.animate(withDuration: 0.6) {
-                button.backgroundColor = "466BB0".hexColor
-                button.setTitle("Register trip", for: .normal)
-            }
-            if let shipmentID = shipmentID {
-                let alert = UIAlertController(title: "Trip Registered", message: "Shipment #\(shipmentID)\nStarting location: \(data.city), \(data.state), \(data.country)", preferredStyle: .alert)
-                alert.addOKButton(nil)
-                self.present(alert, animated: true, completion: nil)
-            } else if let errorReason = errorReason {
-                let alert = UIAlertController(title: "Error", message: errorReason, preferredStyle: .alert)
-                alert.addOKButton(nil)
-                self.present(alert, animated: true, completion: nil)
-            }
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+        button.isEnabled = true
+        UIView.animate(withDuration: 0.6) {
+            button.backgroundColor = "466BB0".hexColor
+            button.setTitle("Register trip", for: .normal)
+        }
+        if let shipmentID = shipmentID {
+            let alert = UIAlertController(title: "Trip Registered", message: "Shipment #\(shipmentID)\nStarting location: \(data.city), \(data.state), \(data.country)", preferredStyle: .alert)
+            alert.addOKButton(nil)
+            self.present(alert, animated: true, completion: nil)
+        } else if let errorReason = errorReason {
+            let alert = UIAlertController(title: "Error", message: errorReason, preferredStyle: .alert)
+            alert.addOKButton(nil)
+            self.present(alert, animated: true, completion: nil)
         }
     }
     
     // MARK: LogisticsManagerLocationDelegate
     
-    func manager(_ manager: LocationManager, didReceiveFirst location: CLLocationCoordinate2D) {
+    open func manager(_ manager: LocationManager, didReceiveFirst location: CLLocationCoordinate2D) {
         let span: MKCoordinateSpan = MKCoordinateSpanMake(0.05, 0.05)
         let region: MKCoordinateRegion = MKCoordinateRegionMake(location, span)
         mapView?.setRegion(region, animated: true)
         manager.getLocationData(forCoordinates: location) { locationData in
-            DispatchQueue.main.async {
-                if let locationLabel = self.locationLabel {
-                    locationLabel.text = "\(locationData.city), \(locationData.state), \(locationData.country)"
-                }
+            if let locationLabel = self.locationLabel {
+                locationLabel.text = "\(locationData.city), \(locationData.state), \(locationData.country)"
             }
         }
     }
