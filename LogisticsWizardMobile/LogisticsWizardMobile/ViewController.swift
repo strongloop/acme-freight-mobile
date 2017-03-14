@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MapKit 
 
 private extension UIAlertController {
     func addCancelButton() {
@@ -38,7 +39,10 @@ private extension String {
     }
 }
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, LogisticsLocationManagerDelegate {
+    private var locationManager: LocationManager?
+    @IBOutlet weak var mapView: MKMapView?
+    @IBOutlet weak var registerTripButton: UIButton?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,24 +53,62 @@ class ViewController: UIViewController {
         imageView.contentMode = .scaleAspectFit
         imageView.bounds = CGRect(x: 0, y: 0, width: 40, height: 40)
         navigationItem.titleView = imageView
+        locationManager = LocationManager()
+        if let locationManager = locationManager {
+            locationManager.delegate = self
+        }
     }
     
-    @IBAction func shipmentButtonTapped() {
-        let alert = UIAlertController(title: "Shipment Failed", message: "Reference: \(randomString(8))", preferredStyle: .alert)
-        alert.addCancelButton()
-        alert.addOKButton(nil)
-        present(alert, animated: true, completion: nil)
-    }
-
-    private func randomString(_ length: Int) -> String {
-        let letters : String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        let len = letters.characters.count
-        var randomString = ""
-        for _ in 0 ..< length {
-            let rand = arc4random_uniform(UInt32(len))
-            randomString += "\(letters[letters.index(letters.startIndex, offsetBy: Int(rand))])"
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        guard let button = registerTripButton else {
+            return
         }
-        return randomString
+        button.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6).cgColor
+        button.layer.shadowOffset = CGSize(width: 1.0, height: 3.0)
+        button.layer.shadowOpacity = 0.65
+        button.layer.shadowRadius = 3.0
+        button.layer.cornerRadius = 3.0
+        button.layer.masksToBounds = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        guard let mapView = mapView else {
+            return
+        }
+        mapView.showsUserLocation = true
+    }
+    
+    @IBAction func registerTripButtonTapped() {
+        guard let button = registerTripButton else {
+            return
+        }
+        guard let locationManager = locationManager else {
+            return
+        }
+        guard let location = locationManager.lastLoggedLocation else {
+            return
+        }
+        button.isEnabled = false
+        button.setTitle("Registering trip", for: .normal)
+        locationManager.getLocationData(forCoordinates: location.coordinate) { data in
+            defer {
+                button.isEnabled = true
+            }
+            let trip = Trip(locationData: data, coordinates: location.coordinate)
+            WebAPI.register(trip, { success in
+                print("update UI now")
+            })
+        }
+    }
+    
+    // MARK: LogisticsManagerLocationDelegate
+    
+    func manager(_ manager: LocationManager, didReceiveFirst location: CLLocationCoordinate2D) {
+        let span: MKCoordinateSpan = MKCoordinateSpanMake(0.05, 0.05)
+        let region: MKCoordinateRegion = MKCoordinateRegionMake(location, span)
+        mapView?.setRegion(region, animated: true)
     }
 }
 
