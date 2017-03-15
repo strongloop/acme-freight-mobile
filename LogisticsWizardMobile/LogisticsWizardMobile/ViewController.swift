@@ -159,8 +159,8 @@ class ViewController: UIViewController, LogisticsLocationManagerDelegate {
     
     // MARK: LogisticsManagerLocationDelegate
     
-    open func manager(_ manager: LocationManager, didReceiveFirst location: CLLocationCoordinate2D) {
-        let span: MKCoordinateSpan = MKCoordinateSpanMake(0.05, 0.05)
+    internal func manager(_ manager: LocationManager, didReceiveFirst location: CLLocationCoordinate2D) {
+        let span: MKCoordinateSpan = MKCoordinateSpanMake(0.1, 0.1)
         let region: MKCoordinateRegion = MKCoordinateRegionMake(location, span)
         mapView?.setRegion(region, animated: true)
         manager.getLocationData(forCoordinates: location) { locationData in
