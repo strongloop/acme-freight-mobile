@@ -19,9 +19,29 @@ class SettingsController: UIViewController, UITextFieldDelegate {
             print("Error saving fields")
         }
     }
+    
+    @IBAction func resetButtonTapped() {
+        let alert = UIAlertController(title: "Warning", message: "Are you sure you want to reset to default settings?", preferredStyle: .alert)
+        let yesAction = UIAlertAction(title: "Yes", style: .destructive) { action in
+            self.resetFields()
+        }
+        let noAction = UIAlertAction(title: "No", style: .cancel, handler: nil)
+        alert.addAction(yesAction)
+        alert.addAction(noAction)
+        present(alert, animated: true, completion: nil)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadFields()
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    private func loadFields() {
         if let hostURLField = hostURLField {
             hostURLField.text = UserDefaults.standard.string(forKey: WebAPIConstantKeys.hostURLKey)
             hostURLField.delegate = self
@@ -33,9 +53,8 @@ class SettingsController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
+    private func resetFields() {
+        
     }
     
     private func saveFields() -> Bool {

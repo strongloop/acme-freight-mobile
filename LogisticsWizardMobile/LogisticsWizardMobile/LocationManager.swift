@@ -19,6 +19,15 @@ public struct LocationData {
     var country: String
 }
 
+public struct LocationManagerConstantKeys {
+    static let cityKey = "com.ibm.cloud.LogisticsWizardMobile.LocationManagerConstantKeys.CityKey"
+    static let stateKey = "com.ibm.cloud.LogisticsWizardMobile.LocationManagerConstantKeys.StateKey"
+    static let countryKey = "com.ibm.cloud.LogisticsWizardMobile.LocationManagerConstantKeys.CountryKey"
+    static let latitudeKey = "com.ibm.cloud.LogisticsWizardMobile.LocationManagerConstantKeys.LatitudeKey"
+    static let longitudeKey = "com.ibm.cloud.LogisticsWizardMobile.LocationManagerConstantKeys.LongitudeKey"
+    static let forceDefaultLocationKey = "com.ibm.cloud.LogisticsWizardMobile.LocationManagerConstantKeys.ForceDefaultLocationKey"
+}
+
 class LocationManager: NSObject, CLLocationManagerDelegate {
     private var locationManager: CLLocationManager?
     public var lastLoggedLocation: CLLocation?
@@ -70,8 +79,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
                     print("Geocoding error: \(error.localizedDescription)")
                     completion(self.fakeLocationData())
                 }
-                if let placemarks = placemarks, let placemark = placemarks.first {
-                    guard let country = placemark.country, let state = placemark.administrativeArea, let city = placemark.subAdministrativeArea else {
+                if let placemarks = placemarks, let placemark = placemarks.first, let addressDictionary = placemark.addressDictionary {
+                    guard let country = placemark.country, let state = placemark.administrativeArea, let city = addressDictionary["City"] as? String else {
                         completion(self.fakeLocationData())
                         return
                     }
