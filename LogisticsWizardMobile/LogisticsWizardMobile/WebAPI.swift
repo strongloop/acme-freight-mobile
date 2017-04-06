@@ -10,20 +10,23 @@ import UIKit
 
 private struct WebAPIParams {
     static var hostURL: URL? {
-        guard let urlString = UserDefaults.standard.string(forKey: WebAPIConstantKeys.hostURLKey) else {
+        guard let urlString = UserDefaults.standard.string(forKey: WebAPIConstantKeys.hostURL) else {
             return nil
         }
         return URL(string: urlString)
     }
     
     static var openWhiskToken: String? {
-        return UserDefaults.standard.string(forKey: WebAPIConstantKeys.openWhiskTokenKey)
+        return UserDefaults.standard.string(forKey: WebAPIConstantKeys.openWhiskToken)
     }
 }
 
 public struct WebAPIConstantKeys {
-    static let hostURLKey = "com.ibm.cloud.LogisticsWizardMobile.hostURLKey"
-    static let openWhiskTokenKey = "com.ibm.cloud.LogisticsWizardMobile.openWhiskToken"
+    static let hostURL = "com.ibm.cloud.LogisticsWizardMobile.hostURLKey"
+    static let openWhiskToken = "com.ibm.cloud.LogisticsWizardMobile.openWhiskToken"
+    static let defaultLongitude = "com.ibm.cloud.LogisticsWizardMobile.defaultLongitude"
+    static let defaultLatitude = "com.ibm.cloud.LogisticsWizardMobile.defaultLatitude"
+    static let shouldUseDefaultLocation = "com.ibm.cloud.LogisticsWizardMobile.shouldUseDefaultLocation"
 }
 
 private enum WebAPIError: Error {

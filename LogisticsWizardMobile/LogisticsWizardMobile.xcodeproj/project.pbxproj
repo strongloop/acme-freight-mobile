@@ -17,6 +17,8 @@
 		535A6CD61E786B92008472D3 /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535A6CD51E786B92008472D3 /* Trip.swift */; };
 		535A6CD81E788F5A008472D3 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535A6CD71E788F5A008472D3 /* SettingsController.swift */; };
 		535C15B11E785CFF00171705 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535C15B01E785CFF00171705 /* LocationManager.swift */; };
+		53F135271E940A1F0014DFF5 /* PinInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F135261E940A1F0014DFF5 /* PinInput.swift */; };
+		53F135291E940A810014DFF5 /* GUIDInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F135281E940A810014DFF5 /* GUIDInputViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +46,8 @@
 		535A6CD51E786B92008472D3 /* Trip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
 		535A6CD71E788F5A008472D3 /* SettingsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		535C15B01E785CFF00171705 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		53F135261E940A1F0014DFF5 /* PinInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinInput.swift; sourceTree = "<group>"; };
+		53F135281E940A810014DFF5 /* GUIDInputViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GUIDInputViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +113,7 @@
 				532C9F0B1E708DB2001D39EB /* AppDelegate.swift */,
 				532C9F0D1E708DB2001D39EB /* ViewController.swift */,
 				535A6CD71E788F5A008472D3 /* SettingsController.swift */,
+				53F135281E940A810014DFF5 /* GUIDInputViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -136,6 +141,7 @@
 				532C9F0F1E708DB2001D39EB /* Main.storyboard */,
 				532C9F121E708DB2001D39EB /* Assets.xcassets */,
 				532C9F141E708DB2001D39EB /* LaunchScreen.storyboard */,
+				53F135261E940A1F0014DFF5 /* PinInput.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -253,7 +259,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53F135291E940A810014DFF5 /* GUIDInputViewController.swift in Sources */,
 				535A6CD81E788F5A008472D3 /* SettingsController.swift in Sources */,
+				53F135271E940A1F0014DFF5 /* PinInput.swift in Sources */,
 				535A6CD61E786B92008472D3 /* Trip.swift in Sources */,
 				532C9F0E1E708DB2001D39EB /* ViewController.swift in Sources */,
 				532C9F0C1E708DB2001D39EB /* AppDelegate.swift in Sources */,

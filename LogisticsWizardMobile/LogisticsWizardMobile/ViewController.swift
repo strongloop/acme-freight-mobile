@@ -45,6 +45,7 @@ class ViewController: UIViewController, LogisticsLocationManagerDelegate {
     @IBOutlet weak var registerTripButton: UIButton?
     @IBOutlet weak var locationBanner: UILabel?
     @IBOutlet weak var locationLabel: UILabel?
+    @IBOutlet weak var locationBannerView: UIView?
     
     var titleBarImageView: UIImageView {
         let logo = UIImage(named: "API Connect_logo_white")
@@ -69,22 +70,20 @@ class ViewController: UIViewController, LogisticsLocationManagerDelegate {
             locationManager.delegate = self
         }
         if let locationLabel = locationLabel {
-            updateLabelUI(locationLabel)
             locationLabel.text = "Locating..."
         }
-        if let locationBanner = locationBanner {
-            updateLabelUI(locationBanner)
-            locationBanner.layer.shadowOffset = CGSize(width: 1.0, height: 0.0)
+        if let locationBannerView = locationBannerView {
+            updateLocationUI(locationBannerView)
         }
     }
     
-    func updateLabelUI(_ label: UILabel) {
-        label.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6).cgColor
-        label.layer.shadowOffset = CGSize(width: 1.0, height: 3.0)
-        label.layer.shadowOpacity = 0.65
-        label.layer.shadowRadius = 3.0
-        label.layer.cornerRadius = 3.0
-        label.layer.masksToBounds = false
+    func updateLocationUI(_ view: UIView) {
+        view.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6).cgColor
+        view.layer.shadowOffset = CGSize(width: 1.0, height: 3.0)
+        view.layer.shadowOpacity = 0.65
+        view.layer.shadowRadius = 3.0
+        view.layer.cornerRadius = 3.0
+        view.layer.masksToBounds = false
     }
     
     func settingsButtonTapped() {
@@ -108,6 +107,11 @@ class ViewController: UIViewController, LogisticsLocationManagerDelegate {
             return
         }
         mapView.showsUserLocation = true
+        mapView.showsCompass = false
+        
+        if UserDefaults.standard.bool(forKey: EnvVarConstantKeys.requiresGUID) == true {
+            performSegue(withIdentifier: "GUIDInputSegue", sender: nil)
+        }
     }
     
     @IBAction func registerTripButtonTapped() {
@@ -120,15 +124,20 @@ class ViewController: UIViewController, LogisticsLocationManagerDelegate {
         guard let location = locationManager.lastLoggedLocation else {
             return
         }
-        // let coordinates = CLLocationCoordinate2DMake(34.46, -120.04)
-        // uncomment when you want to fake location
         button.isEnabled = false
         UIView.animate(withDuration: 0.6) { 
             button.backgroundColor = "758196".hexColor
             button.setTitle("Registering trip...", for: .normal)
         }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        locationManager.getLocationData(forCoordinates: location.coordinate) { data in
+        var checkCoordinates = CLLocationCoordinate2D()
+        if UserDefaults.standard.bool(forKey: WebAPIConstantKeys.shouldUseDefaultLocation) == true {
+            checkCoordinates = CLLocationCoordinate2D(latitude: UserDefaults.standard.double(forKey: WebAPIConstantKeys.defaultLatitude),
+                                                      longitude: UserDefaults.standard.double(forKey: WebAPIConstantKeys.defaultLongitude))
+        } else {
+            checkCoordinates = location.coordinate
+        }
+        locationManager.getLocationData(forCoordinates: checkCoordinates) { data in
             let trip = Trip(locationData: data, coordinates: location.coordinate)
             WebAPI.register(trip, { shipmentID, errorReason in
                 self.handleRegistrationResponse(data, shipmentID, errorReason)

@@ -8,7 +8,13 @@
 
 import UIKit
 
-
+public struct EnvVarConstantKeys {
+    static let requiresGUID = "com.ibm.cloud.LogisticsWizardMobile.SessionConstants.CurrentSession.requiresGUID"
+    static let defaultOpenWhiskToken = "ODAzMDIzNjEtYzkxNy00Y2JkLTlkYzUtZTExMzc1ZGQwMDk3Om1zVVlpZU95NkJqTXlYQ0xPNXQyNTZSNDRjeHZpYnBpaE9qQlI2ZUdMY0V0YWhJVkNHT2EyTDUwdXRYQlhEUEg="
+    static let defaultHostURL = "https://openwhisk.ng.bluemix.net/api/v1/namespaces/svennam%40us.ibm.com_acme-freight/actions/create-shipment-test"
+    static let defaultLatitude = "46.825905"
+    static let defaultLongitude = "-100.778275"
+}
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,8 +26,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.shared.statusBarStyle = .lightContent
         customizeNavBar(UIColor.white)
 
-    UserDefaults.standard.set("ODAzMDIzNjEtYzkxNy00Y2JkLTlkYzUtZTExMzc1ZGQwMDk3Om1zVVlpZU95NkJqTXlYQ0xPNXQyNTZSNDRjeHZpYnBpaE9qQlI2ZUdMY0V0YWhJVkNHT2EyTDUwdXRYQlhEUEg=", forKey: WebAPIConstantKeys.openWhiskTokenKey)
-        UserDefaults.standard.set("https://openwhisk.ng.bluemix.net/api/v1/namespaces/svennam%40us.ibm.com_acme-freight/actions/create-shipment?blocking=true", forKey: WebAPIConstantKeys.hostURLKey)
+        UserDefaults.standard.set(EnvVarConstantKeys.defaultOpenWhiskToken, forKey: WebAPIConstantKeys.openWhiskToken)
+        UserDefaults.standard.set(EnvVarConstantKeys.defaultHostURL, forKey: WebAPIConstantKeys.hostURL)
+        UserDefaults.standard.set(true, forKey: EnvVarConstantKeys.requiresGUID)
         
         return true
     }
@@ -31,28 +38,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIBarButtonItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: color], for: .normal)
     }
 
-    func applicationWillResignActive(_ application: UIApplication) {
-        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-        // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
-    }
-
     func applicationDidEnterBackground(_ application: UIApplication) {
+        resetGUIDRequired()
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
 
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-    }
-
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    }
-
     func applicationWillTerminate(_ application: UIApplication) {
+        resetGUIDRequired()
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-
+    
+    func resetGUIDRequired() {
+        let defaults = UserDefaults.standard
+        defaults.set(true, forKey: EnvVarConstantKeys.requiresGUID)
+        defaults.synchronize()
+    }
 }
 
